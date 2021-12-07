@@ -32,16 +32,22 @@ class _LoginState extends State<Login> {
 
   signIn() async {
     try {
-      LoginResult _result = await LineSDK.instance.login();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => Profile(
-            result: _result,
+      LoginResult _result =
+          await LineSDK.instance.login(scopes: ["profile", "openid"]);
+      AccessTokenVerifyResult _verify =
+          await LineSDK.instance.verifyAccessToken();
+      if (_verify.channelId == "1656632301") {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => Profile(
+              result: _result,
+              verify: _verify,
+            ),
           ),
-        ),
-        (route) => false,
-      );
+          (route) => false,
+        );
+      }
     } on PlatformException catch (e) {
       print(e.message);
     }

@@ -8,9 +8,11 @@ class Profile extends StatefulWidget {
   const Profile({
     Key? key,
     required this.result,
+    required this.verify,
   }) : super(key: key);
 
   final LoginResult result;
+  final AccessTokenVerifyResult verify;
 
   @override
   _ProfileState createState() => _ProfileState();
@@ -19,48 +21,64 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    print(widget.result.accessToken.value);
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
+        child: ListView(children: [
+          Column(
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(15.0),
+                  child: const Text('Login Success!!')),
+              Container(
                 padding: const EdgeInsets.all(15.0),
-                child: const Text('Login Success!!')),
-            Container(
-              padding: const EdgeInsets.all(15.0),
-              child: CircleAvatar(
-                radius: 40.0,
-                backgroundImage: NetworkImage(
-                  widget.result.userProfile!.pictureUrlLarge.toString(),
+                child: CircleAvatar(
+                  radius: 60.0,
+                  backgroundImage: NetworkImage(
+                    widget.result.userProfile!.pictureUrl.toString(),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(15.0),
-              child: Text('ID: ${widget.result.userProfile!.userId}'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(15.0),
-              child:
-                  Text('Username: ${widget.result.userProfile!.displayName}'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(15.0),
-              child: Text('Token: ${widget.result.accessToken.data}'),
-            ),
-            Container(
-              padding: const EdgeInsets.all(15.0),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  signOut();
-                },
-                icon: const Icon(Icons.logout),
-                label: const Text('Logout'),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Text('ID: ${widget.result.userProfile!.userId}'),
               ),
-            ),
-          ],
-        ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                    'Display Name: ${widget.result.userProfile!.displayName}'),
+              ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child:
+                    Text('Status: ${widget.result.userProfile!.statusMessage}'),
+              ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child:
+                    Text('Access tokens: ${widget.result.accessToken.value}'),
+              ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Text('ID tokens: ${widget.result.accessToken.idToken}'),
+              ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: Text('Verify result: ${widget.verify.data}'),
+              ),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    signOut();
+                  },
+                  icon: const Icon(Icons.logout),
+                  label: const Text('Logout'),
+                ),
+              ),
+            ],
+          ),
+        ]),
       ),
     );
   }
